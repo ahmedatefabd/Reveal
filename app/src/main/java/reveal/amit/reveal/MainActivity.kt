@@ -18,19 +18,18 @@ import android.transition.Transition
 import android.R.attr.left
 import android.R.attr.top
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.graphics.Rect
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var revealed = false
     private val duration = 200L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //setSupportActionBar(toolbar)
-        getMatrix()
 
         fab.setOnClickListener { view ->
             //move child of existing view to left
@@ -46,11 +45,10 @@ class MainActivity : AppCompatActivity() {
             anim.pathMotion = ArcMotion()
             anim.duration = duration
             anim.addListener(object: Transition.TransitionListener{
+                @SuppressLint("RestrictedApi")
                 override fun onTransitionEnd(p0: Transition?) {
                     revealView(revealView)
                     Handler().postDelayed({ fab.visibility = View.GONE }, 50)
-
-                    revealed = true
                 }
 
                 override fun onTransitionResume(p0: Transition?) {
@@ -88,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             hideView(revealView)
-            revealed = false
         }
     }
 
@@ -109,33 +106,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun revealView(myView: View) {
-
-        println("Fab ${fab.left}")
         val cx = (fab.left + fab.right) / 2
         val cy = ((fab.top + fab.bottom) / 2) - lowerView.y
-        println("Fab x $cx y $cy")
-
         val finalRadius = Math.max(myView.width, myView.height)
-
-
         val anim = ViewAnimationUtils.createCircularReveal(myView, cx , cy.toInt(), 0f, finalRadius.toFloat())
         anim.duration = duration
-
         myView.visibility = View.VISIBLE
-
         anim.start()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun hideView(myView: View) {
         val cx = (fab.left + fab.right) / 2
         val cy = ((fab.top + fab.bottom) / 2) - lowerView.y
-
         val initialRadius = myView.width
-
         val anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy.toInt(), initialRadius.toFloat(), 0f)
         anim.duration = duration
         anim.interpolator = AccelerateInterpolator()
-
         anim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
@@ -161,22 +148,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
         //Normally I would restore visibility when the hide animation has ended, but it doesn't look as good, so I'm doing it earlier.
         Handler().postDelayed({ fab.visibility = View.VISIBLE }, 200)
-
         anim.start()
-
     }
-    
-    fun getMatrix(){
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-
-        val height = displayMetrics.heightPixels
-        val width = displayMetrics.widthPixels
-
-        println("Height $height width $width")
-    }
-
 }
