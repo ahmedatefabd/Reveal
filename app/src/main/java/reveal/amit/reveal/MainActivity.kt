@@ -8,18 +8,13 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.ArcMotion
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
-import android.util.DisplayMetrics
 import android.widget.RelativeLayout
-
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.*
 import android.view.animation.AccelerateInterpolator
 import android.transition.Transition
-import android.R.attr.left
-import android.R.attr.top
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.graphics.Rect
 
 
 class MainActivity : AppCompatActivity() {
