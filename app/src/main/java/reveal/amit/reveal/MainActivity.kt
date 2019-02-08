@@ -19,7 +19,7 @@ import android.annotation.SuppressLint
 
 class MainActivity : AppCompatActivity() {
 
-    private val duration = 200L
+    private val duration = 250L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
